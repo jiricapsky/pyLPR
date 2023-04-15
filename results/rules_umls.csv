@@ -1,0 +1,268 @@
+rel,path,weight,freq,neg
+affects,"['R_result_of', 'affects']",0.26315789,14110,6218
+affects,"['causes', 'R_process_of']",0.26315789,3847,1335
+affects,"['affects', 'precedes']",0.47368421,4178,850
+affects,"['R_precedes', 'affects']",0.15789474,2766,684
+affects,['R_result_of'],0.15789474,695,379
+affects,"['R_disrupts', 'R_result_of']",0.26315789,306,148
+affects,"['R_result_of', 'part_of']",0.10526316,1458,684
+affects,"['affects', 'R_process_of']",0.26315789,17488,4728
+affects,"['affects', 'R_interacts_with']",0.31578947,3056,704
+affects,"['result_of', 'part_of']",0.15789474,1101,359
+affects,"['isa', 'affects']",0.15789474,1982,428
+affects,"['affects', 'interacts_with']",0.15789474,2968,616
+affects,"['affects', 'isa']",0.31578947,4211,2209
+contains,"['produces', 'R_consists_of']",1.0,101,19
+measures,"['R_result_of', 'evaluation_of']",0.42857143,56,8
+measures,"['method_of', 'R_issue_in']",0.57142857,1450,954
+measures,"['measures', 'derivative_of', 'location_of']",0.42857143,135,55
+measures,"['measures', 'R_causes']",0.42857143,1080,350
+evaluation_of,"['manifestation_of', 'disrupts']",0.5,84,52
+evaluation_of,"['co-occurs_with', 'evaluation_of']",0.5,64,8
+evaluation_of,['manifestation_of'],0.5,179,125
+evaluation_of,"['evaluation_of', 'R_isa']",1.0,120,12
+evaluation_of,"['evaluation_of', 'R_method_of']",0.66666667,10,0
+evaluation_of,"['evaluation_of', 'isa']",1.0,252,144
+precedes,"['R_precedes', 'precedes']",1.0,416,92
+precedes,"['analyzes', 'R_uses']",1.0,3,1
+connected_to,['adjacent_to'],1.0,7,3
+result_of,"['R_associated_with', 'performs']",0.75,200,100
+result_of,"['result_of', 'result_of', 'R_result_of']",0.75,11217,1117
+result_of,"['result_of', 'result_of']",0.25,14322,4714
+treats,"['manages', 'manages']",0.33333333,4,0
+treats,['prevents'],1.0,50,12
+treats,"['R_uses', 'treats']",1.0,116,60
+treats,"['uses', 'complicates']",1.0,67,35
+practices,"['practices', 'issue_in']",0.66666667,4,0
+co-occurs_with,"['isa', 'co-occurs_with']",0.45454545,38,8
+co-occurs_with,"['R_conceptually_related_to', 'complicates']",0.090909091,14,6
+co-occurs_with,"['R_affects', 'carries_out']",0.27272727,17,5
+co-occurs_with,"['R_associated_with', 'treats']",0.45454545,111,59
+co-occurs_with,"['isa', 'R_precedes']",0.27272727,74,36
+co-occurs_with,"['R_measurement_of', 'R_affects']",0.27272727,63,33
+co-occurs_with,['precedes'],0.18181818,89,49
+co-occurs_with,"['result_of', 'treats']",0.36363636,129,71
+co-occurs_with,"['R_diagnoses', 'causes']",0.18181818,103,47
+co-occurs_with,['R_precedes'],0.27272727,88,50
+produces,"['R_disrupts', 'R_causes']",0.071428571,444,292
+produces,"['produces', 'interacts_with']",0.75,1685,845
+produces,"['R_isa', 'produces']",0.10714286,949,603
+produces,['uses'],0.89285714,90,20
+produces,"['isa', 'produces']",0.85714286,426,80
+produces,"['contains', 'consists_of']",0.071428571,113,31
+produces,"['process_of', 'produces']",0.14285714,2219,609
+produces,"['interacts_with', 'uses']",0.10714286,172,30
+produces,"['location_of', 'analyzes']",0.071428571,372,282
+produces,['R_affects'],0.10714286,725,589
+produces,"['produces', 'R_isa']",0.035714286,150,22
+produces,['R_disrupts'],0.17857143,201,95
+derivative_of,['R_surrounds'],1.0,4,2
+part_of,"['contains', 'part_of', 'part_of']",1.0,224,66
+part_of,['R_consists_of'],1.0,2,0
+part_of,"['location_of', 'R_interacts_with']",1.0,174,42
+part_of,"['location_of', 'interacts_with']",1.0,660,100
+part_of,"['contains', 'R_contains']",1.0,77,67
+disrupts,"['complicates', 'R_location_of']",1.0,2378,1014
+disrupts,"['complicates', 'manifestation_of']",1.0,1593,891
+degree_of,['R_isa'],1.0,42,34
+degree_of,"['occurs_in', 'precedes']",0.4,67,9
+degree_of,"['isa', 'R_precedes']",0.2,58,24
+degree_of,['precedes'],0.2,62,26
+degree_of,"['precedes', 'precedes']",0.2,195,81
+degree_of,['R_degree_of'],0.4,52,8
+degree_of,['R_precedes'],0.2,62,26
+conceptually_related_to,['degree_of'],1.0,8,6
+conceptually_related_to,"['isa', 'R_conceptual_part_of']",0.33333333,3,1
+surrounds,"['R_connected_to', 'R_adjacent_to']",0.33333333,7,5
+surrounds,"['derivative_of', 'R_developmental_form_of']",1.0,2,0
+surrounds,['R_derivative_of'],1.0,2,0
+surrounds,"['R_surrounds', 'adjacent_to']",0.33333333,3,1
+surrounds,"['R_derivative_of', 'R_contains']",0.66666667,10,6
+surrounds,['interconnects'],1.0,3,1
+surrounds,"['consists_of', 'R_surrounds']",1.0,2,0
+indicates,"['measurement_of', 'complicates']",1.0,213,21
+indicates,['R_location_of'],0.5,42,38
+indicates,"['isa', 'R_location_of']",0.5,19,15
+indicates,"['associated_with', 'interacts_with']",0.5,25,21
+indicates,"['isa', 'R_produces']",1.0,23,15
+indicates,"['R_produces', 'conceptually_related_to']",0.66666667,9,7
+issue_in,"['isa', 'issue_in', 'issue_in']",0.5,1198,170
+issue_in,"['isa', 'issue_in']",0.5,1204,192
+issue_in,"['issue_in', 'issue_in']",0.5,442,78
+issue_in,"['R_isa', 'issue_in']",0.33333333,1320,308
+associated_with,"['degree_of', 'associated_with']",0.33333333,142,60
+associated_with,"['isa', 'associated_with']",1.0,238,46
+associated_with,"['R_performs', 'R_occurs_in']",1.0,1151,447
+associated_with,"['R_location_of', 'R_interacts_with']",1.0,60,42
+associated_with,['R_occurs_in'],1.0,88,52
+associated_with,"['R_result_of', 'R_measurement_of']",0.33333333,336,214
+associated_with,"['evaluation_of', 'complicates']",1.0,271,43
+associated_with,"['R_exhibits', 'R_property_of']",1.0,82,0
+associated_with,"['R_co-occurs_with', 'associated_with']",0.33333333,282,142
+associated_with,"['affects', 'R_performs']",1.0,87,41
+associated_with,"['R_indicates', 'evaluation_of']",0.33333333,236,188
+associated_with,"['R_exhibits', 'practices']",1.0,8,0
+exhibits,"['interacts_with', 'R_associated_with']",1.0,60,12
+exhibits,"['performs', 'process_of']",1.0,10,2
+exhibits,"['isa', 'exhibits']",1.0,52,12
+measurement_of,"['R_degree_of', 'measurement_of']",0.4,10,2
+measurement_of,['indicates'],0.6,20,12
+measurement_of,"['indicates', 'R_causes']",1.0,495,185
+measurement_of,['manifestation_of'],0.6,100,78
+measurement_of,"['degree_of', 'measurement_of']",0.4,10,2
+measurement_of,"['isa', 'evaluation_of']",0.4,30,18
+measurement_of,"['conceptual_part_of', 'complicates']",1.0,16,8
+analyzes,"['assesses_effect_of', 'R_consists_of']",1.0,28,0
+analyzes,"['assesses_effect_of', 'R_isa']",1.0,196,62
+prevents,"['isa', 'prevents']",1.0,14,2
+prevents,"['treats', 'diagnoses']",0.4,44,22
+prevents,['treats'],0.4,67,29
+prevents,"['treats', 'R_occurs_in']",0.2,107,27
+prevents,"['treats', 'R_degree_of']",0.13333333,182,42
+prevents,"['treats', 'R_isa']",0.26666667,45,19
+prevents,"['R_uses', 'diagnoses']",0.2,78,44
+prevents,"['R_uses', 'prevents']",0.066666667,33,17
+prevents,"['treats', 'conceptually_related_to']",0.46666667,8,2
+property_of,"['R_associated_with', 'part_of']",1.0,128,22
+isa,"['isa', 'isa']",1.0,986,162
+isa,"['R_adjacent_to', 'isa']",1.0,46,20
+isa,"['adjacent_to', 'isa']",0.5,46,20
+isa,"['contains', 'R_contains']",0.5,63,55
+isa,['R_interacts_with'],0.5,460,402
+isa,"['R_practices', 'practices']",1.0,3,1
+isa,"['method_of', 'R_method_of']",1.0,138,110
+isa,"['R_practices', 'isa']",0.16666667,4,2
+isa,"['R_exhibits', 'R_associated_with']",1.0,32,16
+isa,"['R_manages', 'manages']",1.0,15,9
+isa,"['issue_in', 'issue_in', 'isa']",0.5,644,352
+isa,"['R_isa', 'isa']",0.5,1648,824
+isa,['co-occurs_with'],1.0,62,48
+isa,"['R_interacts_with', 'isa']",0.5,2732,710
+isa,"['contains', 'derivative_of', 'isa']",0.5,42,8
+isa,"['interacts_with', 'isa']",0.5,2826,804
+isa,"['R_precedes', 'isa']",1.0,430,88
+carries_out,"['R_isa', 'carries_out']",0.5,95,57
+carries_out,['location_of'],0.5,100,50
+carries_out,"['location_of', 'R_isa']",0.5,104,50
+carries_out,"['R_manages', 'performs']",0.5,68,34
+carries_out,"['isa', 'carries_out']",0.16666667,48,10
+causes,"['isa', 'causes']",0.84,1086,220
+causes,"['ingredient_of', 'causes']",0.053333333,308,66
+causes,"['R_measures', 'diagnoses']",0.026666667,817,321
+causes,"['R_measurement_of', 'indicates']",0.026666667,582,272
+causes,"['R_measurement_of', 'manifestation_of']",0.026666667,510,244
+causes,"['interacts_with', 'causes']",0.04,3640,666
+causes,"['R_uses', 'R_result_of']",0.08,204,56
+causes,"['issue_in', 'R_practices', 'diagnoses']",0.013333333,1417,921
+causes,"['R_analyzes', 'R_result_of']",0.026666667,596,178
+causes,"['affects', 'affects', 'result_of']",0.013333333,37166,330
+causes,"['R_uses', 'associated_with']",0.16,332,96
+causes,"['R_analyzes', 'diagnoses']",0.04,524,102
+causes,"['R_analyzes', 'associated_with']",0.013333333,566,128
+causes,['R_process_of'],0.94666667,196,158
+interconnects,"['R_adjacent_to', 'adjacent_to']",0.66666667,9,5
+adjacent_to,"['contains', 'R_contains']",1.0,42,34
+uses,"['precedes', 'uses']",1.0,14,4
+uses,"['R_precedes', 'uses']",1.0,12,2
+uses,"['R_interacts_with', 'produces']",1.0,156,14
+uses,['produces'],1.0,91,21
+uses,"['isa', 'uses']",0.33333333,30,4
+interacts_with,"['prevents', 'R_indicates']",0.5,33,25
+interacts_with,"['R_assesses_effect_of', 'analyzes']",0.33333333,1560,1002
+interacts_with,"['R_location_of', 'R_associated_with']",0.33333333,158,136
+interacts_with,"['isa', 'R_interacts_with']",0.25,1288,898
+interacts_with,"['isa', 'interacts_with']",0.58333333,866,364
+interacts_with,"['R_analyzes', 'analyzes']",0.083333333,1256,766
+interacts_with,"['R_property_of', 'property_of']",1.0,691,375
+interacts_with,['R_isa'],0.25,199,141
+interacts_with,"['R_measurement_of', 'measurement_of']",0.083333333,1053,747
+interacts_with,['isa'],0.25,230,178
+interacts_with,"['R_uses', 'assesses_effect_of']",0.083333333,150,122
+interacts_with,"['R_affects', 'R_uses']",1.0,53,29
+interacts_with,"['R_analyzes', 'uses']",0.16666667,154,120
+interacts_with,"['R_analyzes', 'assesses_effect_of']",0.33333333,1529,981
+interacts_with,"['R_uses', 'analyzes']",0.083333333,154,126
+assesses_effect_of,"['method_of', 'complicates']",1.0,29,17
+assesses_effect_of,['analyzes'],1.0,73,15
+assesses_effect_of,"['analyzes', 'R_isa']",1.0,159,25
+assesses_effect_of,"['method_of', 'measures']",1.0,94,42
+assesses_effect_of,"['measures', 'conceptual_part_of']",1.0,15,9
+developmental_form_of,"['contains', 'R_contains']",1.0,35,27
+method_of,"['R_carries_out', 'issue_in']",1.0,86,20
+method_of,"['R_evaluation_of', 'evaluation_of']",1.0,121,111
+diagnoses,['manifestation_of'],0.5,88,74
+diagnoses,['prevents'],1.0,34,22
+diagnoses,"['isa', 'associated_with']",0.5,120,76
+diagnoses,"['assesses_effect_of', 'treats']",0.5,60,24
+process_of,"['R_result_of', 'property_of']",0.46875,771,299
+process_of,"['isa', 'result_of']",0.03125,1181,435
+process_of,"['R_affects', 'indicates']",0.09375,230,40
+process_of,['R_isa'],0.15625,140,80
+process_of,"['R_precedes', 'affects']",0.03125,2680,530
+process_of,"['R_isa', 'R_precedes']",0.1875,334,98
+process_of,['R_result_of'],0.25,568,286
+process_of,"['isa', 'process_of']",0.34375,1312,266
+process_of,"['R_manifestation_of', 'part_of']",0.5,808,170
+process_of,"['R_measurement_of', 'property_of']",0.34375,280,38
+process_of,['affects'],0.03125,1131,573
+process_of,"['co-occurs_with', 'process_of']",0.0625,1260,294
+process_of,['precedes'],0.03125,112,30
+process_of,"['R_precedes', 'process_of']",0.0625,2728,504
+process_of,"['R_result_of', 'R_isa']",0.21875,1182,420
+process_of,['R_process_of'],0.3125,547,239
+process_of,['R_precedes'],0.15625,112,24
+process_of,"['R_affects', 'prevents']",0.03125,246,22
+complicates,"['affects', 'co-occurs_with']",0.1,2104,1304
+complicates,"['associated_with', 'R_associated_with']",0.2,825,623
+complicates,"['affects', 'complicates']",0.1,2173,1229
+complicates,"['occurs_in', 'associated_with']",0.3,259,91
+complicates,['R_result_of'],0.3,522,418
+complicates,['result_of'],0.1,541,445
+complicates,['affects'],0.2,851,603
+complicates,"['disrupts', 'result_of']",0.8,1895,577
+complicates,"['affects', 'R_isa']",0.1,1437,945
+location_of,"['isa', 'location_of']",0.33333333,240,70
+location_of,['carries_out'],0.33333333,60,10
+location_of,"['contains', 'issue_in', 'R_issue_in']",0.33333333,2669,2155
+location_of,"['R_part_of', 'R_complicates']",0.33333333,751,629
+location_of,"['R_part_of', 'R_disrupts']",0.33333333,1032,736
+location_of,"['part_of', 'R_affects']",0.33333333,3934,1624
+location_of,"['surrounds', 'location_of']",0.33333333,176,46
+location_of,"['R_location_of', 'location_of']",0.33333333,4061,3683
+location_of,"['issue_in', 'R_issue_in']",0.33333333,11385,10871
+occurs_in,"['R_associated_with', 'interacts_with']",0.5,80,14
+occurs_in,"['R_prevents', 'associated_with']",0.5,29,17
+occurs_in,"['R_precedes', 'conceptual_part_of']",0.5,23,1
+occurs_in,"['R_co-occurs_with', 'R_conceptual_part_of']",0.5,14,0
+occurs_in,"['R_treats', 'R_produces']",0.5,148,22
+occurs_in,"['R_treats', 'R_performs']",0.5,95,19
+occurs_in,"['R_prevents', 'diagnoses']",0.5,47,21
+occurs_in,"['isa', 'occurs_in']",0.5,101,21
+ingredient_of,"['derivative_of', 'produces', 'ingredient_of']",1.0,16,0
+ingredient_of,"['isa', 'ingredient_of']",1.0,104,14
+consists_of,"['R_contains', 'produces']",1.0,111,29
+conceptual_part_of,"['surrounds', 'conceptual_part_of']",1.0,5,1
+conceptual_part_of,['R_conceptual_part_of'],1.0,14,6
+conceptual_part_of,"['adjacent_to', 'conceptual_part_of']",1.0,10,6
+conceptual_part_of,"['R_conceptually_related_to', 'isa']",1.0,4,2
+conceptual_part_of,"['R_conceptual_part_of', 'co-occurs_with']",0.33333333,6,2
+manages,"['R_affects', 'R_produces']",1.0,64,52
+manifestation_of,"['measurement_of', 'R_co-occurs_with']",0.21153846,62,32
+manifestation_of,"['evaluation_of', 'complicates']",0.5,277,55
+manifestation_of,"['co-occurs_with', 'manifestation_of']",0.096153846,656,134
+manifestation_of,['evaluation_of'],0.5,82,28
+manifestation_of,['measurement_of'],0.19230769,59,37
+manifestation_of,"['R_exhibits', 'R_produces']",0.019230769,16,8
+manifestation_of,['occurs_in'],0.019230769,74,50
+manifestation_of,['R_result_of'],0.096153846,518,368
+manifestation_of,"['R_treats', 'affects']",0.51923077,511,143
+manifestation_of,['result_of'],0.38461538,552,380
+manifestation_of,"['R_isa', 'manifestation_of']",0.40384615,573,413
+manifestation_of,"['R_exhibits', 'causes']",0.40384615,18,14
+manifestation_of,['degree_of'],0.17307692,51,13
+manifestation_of,"['R_co-occurs_with', 'manifestation_of']",0.096153846,733,211
+manifestation_of,"['measurement_of', 'co-occurs_with']",0.21153846,66,32
+manifestation_of,['R_affects'],0.19230769,635,521
+manifestation_of,"['isa', 'manifestation_of']",0.5,186,26
+performs,"['R_interacts_with', 'performs']",1.0,286,50
+performs,"['interacts_with', 'performs']",1.0,300,64

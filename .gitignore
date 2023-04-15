@@ -1,0 +1,7 @@
+.ipynb_checkpoints
+.vscode
+build
+__pycache__
+Pipfile*
+Column generation.ipynb
+Experiments.ipynb
