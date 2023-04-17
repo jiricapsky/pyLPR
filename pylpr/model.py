@@ -310,7 +310,7 @@ class LPR_model:
     def get_neg_valid(self, graph, rule, reverse=False):
         a = self.reverse_path(self.get_rule_antecedent(rule)) if reverse else self.get_rule_antecedent(rule)
         rel = self.data.inverse_rel(rule['consequent']) if reverse else rule['consequent']
-        endpoints = [(start, self.find_endpoints_from_node(graph, start, a)) for start in np.unique(self.data.graphs[graph][rel].nonzero()[0])]
+        endpoints = [(start, self.find_endpoints_from_node(graph, start, a)) for start in self.data.graphs[graph][rel]]
         facts = dict(self.data.get_facts_for_rel(graph, rel))
         valid = 0
         for h, t in endpoints:

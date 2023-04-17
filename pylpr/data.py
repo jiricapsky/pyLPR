@@ -86,43 +86,19 @@ class Data:
     #
     def create_graph(self, filepath, include_inverse=False):
         graph = {}
-        for rel in np.arange(self.num_relation):
-            graph[rel] = dok_array((self.num_entity, self.num_entity), dtype=np.bool_)
-
-        with open(filepath) as f:
-            for line in f:
-                splitted = line.strip().split()
-                assert len(splitted) == 3
-
-                head = self.entity_to_num[splitted[0]]
-                rel = self.relation_to_num[splitted[1]]
-                tail = self.entity_to_num[splitted[2]]
-
-                graph[rel][head, tail] = True
-
-
-        if include_inverse:
-            for rel in np.arange(self.num_relation):
-                graph[rel+self.num_relation] = graph[rel].transpose()
-
-        for rel in graph:
-            graph[rel] = graph[rel].tolil()
-
-        return graph
-    
-    def create_graph_dict(self, filepath, include_inverse=False):
-        graph = {}
         for rel in np.arange(self.num_relation * (include_inverse + 1)):
             graph[rel] = {}
+            for e in np.arange(self.num_entity):
+                graph[rel][e] = []
 
         with open(filepath) as f:
             for line in f:
                 splitted = line.strip().split()
                 assert len(splitted) == 3
 
-                head = self.entity_to_num[splitted[0]]
+                tail = self.entity_to_num[splitted[0]]
                 rel = self.relation_to_num[splitted[1]]
-                tail = self.entity_to_num[splitted[2]]
+                head = self.entity_to_num[splitted[2]]
 
                 try:
                     graph[rel][head].append(tail)
@@ -137,6 +113,31 @@ class Data:
 
         return graph
     
+    def create_graph_sparse(self, filepath, include_inverse=False):
+        graph = {}
+        for rel in np.arange(self.num_relation):
+            graph[rel] = dok_array((self.num_entity, self.num_entity), dtype=np.bool_)
+
+        with open(filepath) as f:
+            for line in f:
+                splitted = line.strip().split()
+                assert len(splitted) == 3
+
+                tail = self.entity_to_num[splitted[0]]
+                rel = self.relation_to_num[splitted[1]]
+                head = self.entity_to_num[splitted[2]]
+
+                graph[rel][tail, head] = True
+
+
+        if include_inverse:
+            for rel in np.arange(self.num_relation):
+                graph[rel+self.num_relation] = graph[rel].transpose()
+
+        for rel in graph:
+            graph[rel] = graph[rel].tolil()
+
+        return graph
 
     def get_graph(self, name: Graph_names):
         return self.graphs[name]
@@ -172,14 +173,10 @@ class Data:
     #
 
     def get_tails_for_rel_head(self, graph, rel, head):
-        return self.graphs[graph][rel].rows[head]
+        return self.graphs[graph][rel][head]
     
     def find_heads_for_rel_tail(self, graph: Graph_names, rel: int, tail: int):
-        heads = []
-        for head, tails in self.graphs[graph][rel].items():
-            if tail in tails:
-                heads.append(head)
-        return heads
+        return [head for head, tails in self.graphs[graph][rel].items() if tail in tails]
 
     def get_tails_for_rel_entity(self, graph: Graph_names, rel: int, entity: int, reverse=False) -> list[int]:
         result = None
@@ -231,17 +228,10 @@ class Data:
         return result
 
     def get_tails(self, graph, head):
-        return [(rel, self.graphs[graph][rel].rows[head]) for rel in self.graphs[graph] if self.graphs[graph][rel].rows[head]]
-
-    def _remove_empty(self, results: dict[int, tuple[NDArray[np.intp]]]) -> dict[int, tuple[NDArray[np.intp]]]:
-        for key in results.copy():
-            if len(results[key]) == 0:
-                results.pop(key)
-
-        return results
+        return [(rel, self.graphs[graph][rel][head]) for rel in self.graphs[graph]]
 
     #
     # FACTS
     #
     def get_facts_for_rel(self, graph, rel):
-        return [(head, tails) for (head, tails) in enumerate(self.graphs[graph][rel].rows) if tails]
+        return [(head, tails) for (head, tails) in self.graphs[graph][rel].items()]
