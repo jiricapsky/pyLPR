@@ -139,29 +139,30 @@ class LPR_model:
     def _get_rules_h1(self, graph_name: Graph_names, rel: int) -> set[tuple[int]]:
         rel_paths = set()
         for start, ends in self.data.get_facts_for_rel(graph_name, rel):
-            paths = []
-            found_facts = [(start, rel, tail) for tail in ends]
-            for r, entites_for_r in self.data.get_tails(graph_name, start):
-                for e in entites_for_r:
-                    fact = (start, r, e)
-                    if fact in found_facts:
-                        continue
-
-                    # completes rel_path
-                    if e in ends:
-                        rel_paths.add((r,))
-
-                    paths.append((r, e))
-            for prev_relation, prev_entity in paths:
-                for r, next_entities in self.data.get_tails(graph_name, prev_entity):
-                    for e in next_entities:
-                        fact = (prev_entity, r, e)
-                        if fact in found_facts:
+            for end in ends:
+                paths = []
+                fact = (start, rel, end)
+                for r, entites_for_r in self.data.get_tails(graph_name, start):
+                    for e in entites_for_r:
+                        found_fact = (start, r, e)
+                        if found_fact == fact:
                             continue
 
                         # completes rel_path
-                        if e in ends:
-                            rel_paths.add((prev_relation, r))
+                        if e == end:
+                            rel_paths.add((r,))
+
+                        paths.append((r, e))
+                for prev_relation, prev_entity in paths:
+                    for r, next_entities in self.data.get_tails(graph_name, prev_entity):
+                        for e in next_entities:
+                            found_fact = (prev_entity, r, e)
+                            if found_fact == fact:
+                                continue
+
+                            # completes rel_path
+                            if e == end:
+                                rel_paths.add((prev_relation, r))
 
         return rel_paths
 
