@@ -113,11 +113,7 @@ class TestData(unittest.TestCase):
             2: [1],
             3: [0]
         }
-        self.assertEqual(len(facts.keys()), len(expected.keys()))
-        self.assertCountEqual(facts[0], expected[0])
-        self.assertCountEqual(facts[1], expected[1])
-        self.assertCountEqual(facts[2], expected[2])
-        self.assertCountEqual(facts[3], expected[3])
+        self.assertDictEqual(facts, expected)
 
         ## inverse
         # 0 -> r1 -> inverse
@@ -127,15 +123,11 @@ class TestData(unittest.TestCase):
             facts[h] = t
         expected = {
             0: [3],
-            1: [2, 0],
+            1: [0, 2],
             2: [0],
             3: [1]
         }
-        self.assertEqual(len(facts.keys()), len(expected.keys()))
-        self.assertCountEqual(facts[0], expected[0])
-        self.assertCountEqual(facts[1], expected[1])
-        self.assertCountEqual(facts[2], expected[2])
-        self.assertCountEqual(facts[3], expected[3])
+        self.assertDictEqual(facts, expected)
 
     def test_get_tails_new(self):
         # get next entities for all relations

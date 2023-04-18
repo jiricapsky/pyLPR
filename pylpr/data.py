@@ -228,10 +228,10 @@ class Data:
         return result
 
     def get_tails(self, graph, head):
-        return [(rel, self.graphs[graph][rel][head]) for rel in self.graphs[graph]]
+        return [(rel, self.graphs[graph][rel][head]) for rel in self.graphs[graph] if self.graphs[graph][rel][head]]
 
     #
     # FACTS
     #
     def get_facts_for_rel(self, graph, rel):
-        return [(head, tails) for (head, tails) in self.graphs[graph][rel].items()]
+        return [(head, tails) for (head, tails) in self.graphs[graph][rel].items() if tails]

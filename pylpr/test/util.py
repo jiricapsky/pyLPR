@@ -29,7 +29,7 @@ def dot_from_file(filepath: str):
         for line in f:
             splitted = line.strip().split()
             assert(len(splitted) == 3)
-            graph += f'\n\t{splitted[0]} -> {splitted[2]} [label = "{splitted[1]}"]'
+            graph += f'\n\t{splitted[2]} -> {splitted[0]} [label = "{splitted[1]}"]'
 
     graph += '\n}'
 

@@ -311,10 +311,10 @@ class LPR_model:
         a = self.reverse_path(self.get_rule_antecedent(rule)) if reverse else self.get_rule_antecedent(rule)
         rel = self.data.inverse_rel(rule['consequent']) if reverse else rule['consequent']
         endpoints = [(start, self.find_endpoints_from_node(graph, start, a)) for start in self.data.graphs[graph][rel]]
-        facts = dict(self.data.get_facts_for_rel(graph, rel))
         valid = 0
-        for h, t in endpoints:
-            valid += sum([found in facts[h] for found in t])
+        for start, entities in endpoints:
+            print("path: ", a, start, ' -> ', entities, '\n - rel: ', rel,  self.data.graphs[graph][rel][start])
+            valid += sum([found in self.data.graphs[graph][rel][start] for found in entities])
         neg = sum(len(ends) for _, ends in endpoints) - valid
         return neg, valid
     

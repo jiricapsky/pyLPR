@@ -1,8 +1,8 @@
-e1  r1  e2
-e1  r1  e3
-e2  r1  e4
-e4  r1  e1
-e3  r1  e2
-e1  r2  e3
-e1  r2  e4
-e98 r98  e4
+e2  r1  e1
+e3  r1  e1
+e4  r1  e2
+e1  r1  e4
+e2  r1  e3
+e3  r2  e1
+e4  r2  e1
+e4 r98  e98

@@ -172,7 +172,7 @@ class TestModel(unittest.TestCase):
         rule = np.array([self.model.create_rule(1, (0,)),], dtype=self.model.dtype_rule)[0]
         neg, freq = self.model.calculate_neg_freq(Graph_names.Train, rule)
 
-        expected_neg = 1 + 1
+        expected_neg =  4 + 4
         expected_freq = 1 + 1 + expected_neg
 
         self.assertEqual(neg, expected_neg)
@@ -182,7 +182,7 @@ class TestModel(unittest.TestCase):
         rule = np.array([self.model.create_rule(1, (0, self.model.data.rel_to_inv(0))),], dtype=self.model.dtype_rule)[0]
         neg, freq = self.model.calculate_neg_freq(Graph_names.Train, rule)
 
-        expected_neg = 0 + 0
+        expected_neg = 1 + 1
         expected_freq = 1 + 1 + expected_neg
 
         self.assertEqual(neg, expected_neg)
