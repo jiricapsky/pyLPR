@@ -313,7 +313,6 @@ class LPR_model:
         endpoints = [(start, self.find_endpoints_from_node(graph, start, a)) for start in self.data.graphs[graph][rel]]
         valid = 0
         for start, entities in endpoints:
-            print("path: ", a, start, ' -> ', entities, '\n - rel: ', rel,  self.data.graphs[graph][rel][start])
             valid += sum([found in self.data.graphs[graph][rel][start] for found in entities])
         neg = sum(len(ends) for _, ends in endpoints) - valid
         return neg, valid
