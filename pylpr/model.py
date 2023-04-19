@@ -226,7 +226,7 @@ class LPR_model:
             dual_complex, dual_edges = self.get_dual_vars(problem.constraints.copy())
 
         print(f'- relation \'{rel}\': done')
-        return weights_rules
+        return [rule for _, rule in weights_rules]
     
     #
     # GRAPH TRAVERSAL
