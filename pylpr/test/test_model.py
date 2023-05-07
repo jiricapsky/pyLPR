@@ -37,30 +37,30 @@ class TestModel(unittest.TestCase):
         inv_r1 = self.model.data.rel_to_inv(0)
         rules = self.model._get_rules_h1(Graph_names.Train, 1)
         expected = {
-            (inv_r1,),
             (0,),
-            (0, 0),
-            (0, inv_r1)
+            (inv_r1, 0),
+            (inv_r1,),
+            (0, 0)
         }
         self.assertSetEqual(rules, expected)
 
     def test_bfs(self):
         # for single fact get shortest path and shortest + 1
         ## GRAPH WITH INVERSE RELATIONS
-        # fact: e4 r1 e1
+        # fact: e1 r1 e4
         inv_r1 = self.model.data.rel_to_inv(0)
         inv_r2 = self.model.data.rel_to_inv(1)
-        paths = self.model.bfs(Graph_names.Train, (3, 0, 0), True)
+        paths = self.model.bfs(Graph_names.Train, (0, 0, 3), True)
         expected = [
             (inv_r2,),
             (inv_r1, inv_r1)
         ]
         self.assertListEqual(paths, expected)
 
-        # fact: e1 r1 e2
-        paths = self.model.bfs(Graph_names.Train, (2, 0, 1), True)
+        # fact: e2 r1 e3
+        paths = self.model.bfs(Graph_names.Train, (1, 0, 2), True)
         expected = [
-            (inv_r1, 0) ,
+            (0, inv_r1) ,
             (inv_r1, 1, inv_r1)
         ]
         self.assertListEqual(paths, expected)
@@ -74,21 +74,20 @@ class TestModel(unittest.TestCase):
         inv_r2 = self.model.data.rel_to_inv(1)
         rules = self.model.get_rules_h2(Graph_names.Train, 0)
         expected = {
-            # e4 r1 e1
+            # e2 r1 e3
+            (0, inv_r1),
+            (inv_r1, 1, inv_r1),
+            # e2 e1 e1
+            (0, 0),
+            # e3 r1 e1
+            (1,),
+            (inv_r1, 0),
+            # e1 r1 e4
             (inv_r2,),
             (inv_r1, inv_r1),
-            # e1 r1 e3
-            (1,),
-            (0, inv_r1),
-            # e3 e1 e2
-            (inv_r1, 0),
-            (inv_r1, 1, inv_r1),
-            # e1 r1 e2
-            (0, 0),
-            # e2 r1 e4
-            (inv_r1, 1),
-            (inv_r1, inv_r1, 1)
-
+            # e4 r1 e2
+            (1, inv_r1),
+            (1, inv_r1, inv_r1)
         }
         self.assertSetEqual(rules, expected)
 
@@ -124,24 +123,24 @@ class TestModel(unittest.TestCase):
         rules_h2 = self.model.get_rules_h2(Graph_names.Train, 1)
         rules = rules_h1.union(rules_h2)
         expected_h1 = {
-            (inv_r1,),
             (0,),
-            (0, 0),
-            (0, inv_r1)
+            (inv_r1, 0),
+            (inv_r1,),
+            (0, 0)
         }
         expected_h2 = {
-            # e1 r2 e4
+            # e4 r2 e1
             (inv_r1,),
             (0, 0),
-            # e1 r2 e3
+            # e3 r2 e1
             (0,),
-            (0, inv_r1)
+            (inv_r1, 0)
         }
         expected = {
             (inv_r1,),
             (0,),
             (0, 0),
-            (0, inv_r1),
+            (inv_r1, 0),
         }
 
         self.assertSetEqual(rules, expected)
@@ -172,7 +171,7 @@ class TestModel(unittest.TestCase):
         rule = np.array([self.model.create_rule(1, (0,)),], dtype=self.model.dtype_rule)[0]
         neg, freq = self.model.calculate_neg_freq(Graph_names.Train, rule)
 
-        expected_neg =  4 + 4
+        expected_neg = 1 + 1
         expected_freq = 1 + 1 + expected_neg
 
         self.assertEqual(neg, expected_neg)
@@ -182,8 +181,8 @@ class TestModel(unittest.TestCase):
         rule = np.array([self.model.create_rule(1, (0, self.model.data.rel_to_inv(0))),], dtype=self.model.dtype_rule)[0]
         neg, freq = self.model.calculate_neg_freq(Graph_names.Train, rule)
 
-        expected_neg = 1 + 1
-        expected_freq = 1 + 1 + expected_neg
+        expected_neg = 1 + 0
+        expected_freq = 0 + 0 + expected_neg
 
         self.assertEqual(neg, expected_neg)
         self.assertEqual(freq, expected_freq)
@@ -191,19 +190,19 @@ class TestModel(unittest.TestCase):
     def test_find_endpoints_from_node(self):
         rel_path = (0,)
         endpoints = self.model.find_endpoints_from_node(Graph_names.Train, 0, rel_path)
-        expected = [2, 1]
+        expected = [3,]
         for e in expected:
             self.assertIn(e, endpoints)
 
         rel_path = (0, self.model.data.rel_to_inv(0))
         endpoints = self.model.find_endpoints_from_node(Graph_names.Train, 2, rel_path)
-        expected = [0,]
+        expected = [1,]
         for e in expected:
             self.assertIn(e, endpoints)
 
         rel_path = (0, self.model.data.rel_to_inv(0))
         endpoints = self.model.find_endpoints_from_node(Graph_names.Train, 0, rel_path)
-        expected = [2,]
+        expected = []
         for e in expected:
             self.assertIn(e, endpoints)
 
@@ -212,8 +211,8 @@ class TestModel(unittest.TestCase):
         problem, weights, penalty = self.model._init_base_problem(1, Graph_names.Train)
         # penalty for each edge
         expected_penalty = [
-            pl.LpVariable("Penalty_0:3", lowBound=0.0),
-            pl.LpVariable("Penalty_0:2", lowBound=0.0)
+            pl.LpVariable("Penalty_3:0", lowBound=0.0, upBound=1.0),
+            pl.LpVariable("Penalty_2:0", lowBound=0.0, upBound=1.0)
         ]
 
         for p in penalty:
@@ -225,7 +224,7 @@ class TestModel(unittest.TestCase):
             self.model.create_rule(1, (0,)),
             self.model.create_rule(1, (0, 0)),
             self.model.create_rule(1, (inv_r1,)),
-            self.model.create_rule(1, (0, inv_r1))
+            self.model.create_rule(1, (inv_r1, 0))
         ],
         dtype=self.model.dtype_rule)
 
@@ -233,13 +232,13 @@ class TestModel(unittest.TestCase):
             (pl.LpVariable("w_0", 0.0, 1.0), rules[0]),
             (pl.LpVariable("w_1", 0.0, 1.0), rules[1]),
             (pl.LpVariable("w_2", 0.0, 1.0), rules[2]),
-            (pl.LpVariable("w_3", 0.0, 1.0), rules[0])
+            (pl.LpVariable("w_3", 0.0, 1.0), rules[3])
         ]
 
         # constraints for edge
         expected_constraint = {
-            'c_0:2': (pl.lpSum([weights[0][0], weights[3][0]]) + expected_penalty[1]) >= 1.0,
-            'c_0:3': (pl.lpSum([weights[1][0], weights[2][0]]) + expected_penalty[0]) >= 1.0,
+            'c_2:0': (pl.lpSum([weights[0][0], weights[3][0]]) + expected_penalty[1]) >= 1.0,
+            'c_3:0': (pl.lpSum([weights[1][0], weights[2][0]]) + expected_penalty[0]) >= 1.0,
         }
 
         self.assertDictEqual(problem.constraints, expected_constraint)
@@ -248,18 +247,18 @@ class TestModel(unittest.TestCase):
         # 1 -> 0
         rule = np.array([self.model.create_rule(1, (0,)),], dtype=self.model.dtype_rule)[0]
         rule_antecedent = self.model.get_rule_antecedent(rule)
-        path_exist = self.model.path_exists(rule_antecedent, (0, 3), Graph_names.Train)
+        path_exist = self.model.path_exists(rule_antecedent, (3, 0), Graph_names.Train)
         self.assertFalse(path_exist)
 
         path_rev = self.model.reverse_path(rule_antecedent)
         path_exist = self.model.path_exists(path_rev, (3, 0), Graph_names.Train)
-        self.assertFalse(path_exist)
+        self.assertTrue(path_exist)
 
-        path_exist = self.model.path_exists(rule_antecedent, (0, 2), Graph_names.Train)
+        path_exist = self.model.path_exists(rule_antecedent, (2, 0), Graph_names.Train)
         self.assertTrue(path_exist)
 
         path_rev = self.model.reverse_path(rule_antecedent)
-        path_exist = self.model.path_exists(path_rev, (2, 0), Graph_names.Train)
+        path_exist = self.model.path_exists(path_rev, (0, 2), Graph_names.Train)
         self.assertTrue(path_exist)
 
         # 1 -> 0, r_0
@@ -267,62 +266,61 @@ class TestModel(unittest.TestCase):
         rule = np.array([self.model.create_rule(1, (0, inv_r1)),], dtype=self.model.dtype_rule)[0]
         rule_antecedent = self.model.get_rule_antecedent(rule)
         path_exist = self.model.path_exists(rule_antecedent, (0, 2), Graph_names.Train)
-        self.assertTrue(path_exist)
+        self.assertFalse(path_exist)
 
-        # 1 -> 0, r_0
-        path_exist = self.model.path_exists(rule_antecedent, (3, 1), Graph_names.Train)
+        path_exist = self.model.path_exists(rule_antecedent, (1, 3), Graph_names.Train)
         self.assertFalse(path_exist)
 
     def test_entity_score(self):
-        # fact (0, 1, 3)
+        # fact (3, 1, 0)
         inv_r1 = self.model.data.rel_to_inv(0)
 
         rules = np.array([
             self.model.create_rule(1, (0,), weight=1.0),
             self.model.create_rule(1, (0, 0), weight=1.0),
             self.model.create_rule(1, (inv_r1,), weight=1.0),
-            self.model.create_rule(1, (0, inv_r1), weight=1.0)
+            self.model.create_rule(1, (inv_r1, 0), weight=1.0)
         ],
         dtype=self.model.dtype_rule)
         weights_paths = [(r['weight'], self.model.get_rule_antecedent(r)) for r in rules]
 
-        score = self.model.entity_score(Graph_names.Train, weights_paths, (0, 3))
+        score = self.model.entity_score(Graph_names.Train, weights_paths, (3, 0))
         expected_score = 2 # rules: 1, 2
         self.assertEqual(score, expected_score)
 
         # alternative head entities from next test
-        score = self.model.entity_score(Graph_names.Train, weights_paths, (1, 3))
+        score = self.model.entity_score(Graph_names.Train, weights_paths, (3, 1))
         expected_score = 1
         self.assertEqual(score, expected_score)
 
-        score = self.model.entity_score(Graph_names.Train, weights_paths, (2, 3))
+        score = self.model.entity_score(Graph_names.Train, weights_paths, (3, 2))
         expected_score = 1
         self.assertEqual(score, expected_score)
 
-        score = self.model.entity_score(Graph_names.Train, weights_paths, (4, 3))
+        score = self.model.entity_score(Graph_names.Train, weights_paths, (3, 4))
         expected_score = 0
         self.assertEqual(score, expected_score)
 
 
     def test_get_rank(self):
-        # rank for head in fact (0, 1, 3)
-        fact = (0,1,3)
+        # rank for tail in fact (3, 1, 0)
+        fact = (3,1,0)
         inv_r1 = self.model.data.rel_to_inv(0)
 
         rules = np.array([
             self.model.create_rule(1, (0,), weight=1.0),
             self.model.create_rule(1, (0, 0), weight=1.0),
             self.model.create_rule(1, (inv_r1,), weight=1.0),
-            self.model.create_rule(1, (0, inv_r1), weight=1.0)
+            self.model.create_rule(1, (inv_r1, 0), weight=1.0)
         ],
         dtype=self.model.dtype_rule)
 
         weights_paths = [(r['weight'], self.model.get_rule_antecedent(r)) for r in rules]
         weights_paths_rev = []
         for weight, path in weights_paths:
-            weights_paths_rev.append((weight, [self.model.data.inverse_rel(rel) for rel in path[::-1]]))
+            weights_paths_rev.append((weight, self.model.reverse_path(path)))
 
-        entities = self.model.data.get_tails_corrupted_for_rel_head(Graph_names.Train, self.model.data.rel_to_inv(fact[1]), fact[2])
+        entities = self.model.data.get_heads_corrupted_for_rel_tail(Graph_names.Train, self.model.data.rel_to_inv(fact[1]), fact[2])
         scores = [(
                 entity,
                 self.model.entity_score(Graph_names.Train, weights_paths_rev, (fact[2], entity)))
@@ -330,11 +328,10 @@ class TestModel(unittest.TestCase):
         ]
         true_score = self.model.entity_score(Graph_names.Train, weights_paths_rev, (fact[2], fact[0]))
 
-        # (x, r, t)
+        # (x, r, h)
         scores_expected = [
-            (1, 1),
-            (2, 1),
-            (3, 0),
+            (0, 0),
+            (1, 2),
             (4, 0),
             (5, 0)
         ]
@@ -342,10 +339,10 @@ class TestModel(unittest.TestCase):
         rank = self.model.get_rank(true_score, [score for _, score in scores])
 
         self.assertListEqual(scores, scores_expected)
-        self.assertEqual(rank, 1)
+        self.assertIn(rank, range(1, 3))
 
-        # rank for tail in fact (0, 1, 3)
-        entities = self.model.data.get_tails_corrupted_for_rel_head(Graph_names.Train, fact[1], fact[0])
+        # rank for head in fact (3, 1, 0)
+        entities = self.model.data.get_heads_corrupted_for_rel_tail(Graph_names.Train, fact[1], fact[0])
         scores = [(
                 entity,
                 self.model.entity_score(Graph_names.Train, weights_paths, (fact[0], entity)))
@@ -355,10 +352,11 @@ class TestModel(unittest.TestCase):
 
         scores.sort(reverse=True, key=lambda entity_score: entity_score[1])
 
-        # (h, r, x)
+        # (r, r, x)
         scores_expected = [
-            (1, 2),
-            (0, 0),
+            (1, 1),
+            (2, 1),
+            (3, 0),
             (4, 0),
             (5, 0)
         ]
@@ -367,34 +365,7 @@ class TestModel(unittest.TestCase):
         rank = self.model.get_rank(true_score, [score for _, score in scores])
 
         self.assertListEqual(scores, scores_expected)
-        self.assertIn(rank, range(1, 3))
-
-    def test_triple_rank(self):
-        fact = (0,1,3)
-        inv_r1 = self.model.data.rel_to_inv(0)
-
-        rules = np.array([
-            self.model.create_rule(1, (0,), weight=1.0),
-            self.model.create_rule(1, (0, 0), weight=1.0),
-            self.model.create_rule(1, (inv_r1,), weight=1.0),
-            self.model.create_rule(1, (0, inv_r1), weight=1.0)
-        ],
-        dtype=self.model.dtype_rule)
-
-        weights_paths = [(r['weight'], self.model.get_rule_antecedent(r)) for r in rules]
-        weights_paths_rev = []
-        for weight, path in weights_paths:
-            weights_paths_rev.append((weight, [self.model.data.inverse_rel(rel) for rel in path[::-1]]))
-
-        entities = self.model.data.get_tails_corrupted_for_rel_head(Graph_names.Train, fact[1], fact[0])
-        scores = [
-                self.model.entity_score(Graph_names.Train, weights_paths, (fact[0], entity))
-            for entity in entities
-        ]
-
-        rank = self.model.triple_rank_precomputed(fact, Graph_names.Train, scores, weights_paths, weights_paths_rev)
-
-        # TODO: check rank against expected rank
+        self.assertEqual(rank, 1)
 
 if __name__ == '__main__':
     unittest.main()

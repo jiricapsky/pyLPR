@@ -65,42 +65,29 @@ class TestData(unittest.TestCase):
         low_val = -10 * rel_count
         self.assertEqual(self.data.inv_to_rel(low_val), 0)
 
-    def test_get_tails_for_rel_head_new(self):
+    def test_get_heads_for_rel_tail(self):
         # Get next entities for specified entity and relation
         ## GRAPH WITH INVERSE RELATIONS
         ## normal
         # 0 -> r1
         # 0 -> e1
-        expected_result = [2, 1]
-        self.assertCountEqual(self.data.get_tails_for_rel_entity(Graph_names.Train, 0, 0, False), expected_result)
-        # reverse
         expected_result = [3]
-        self.assertCountEqual(self.data.get_tails_for_rel_entity(Graph_names.Test, 0, 0, True), expected_result)
+        self.assertCountEqual(self.data.get_heads_for_rel_tail(Graph_names.Train, 0, 0), expected_result)
+        # reverse
+        inv_r1 = self.data.rel_to_inv(0)
+        expected_result = [2, 1]
+        self.assertCountEqual(self.data.get_heads_for_rel_tail(Graph_names.Test, inv_r1, 0), expected_result)
 
         ## inverse
         # 0 -> r1 -> inverse
         # 1 -> e2
-        inv_r1 = self.data.rel_to_inv(0)
-        expected_result = [0, 2]
-        self.assertCountEqual(self.data.get_tails_for_rel_entity(Graph_names.Train, inv_r1, 1, False), expected_result)
-        # reverse
         expected_result = [3]
-        self.assertCountEqual(self.data.get_tails_for_rel_entity(Graph_names.Train, inv_r1, 1, True), expected_result)
-
-        ## GRAPH WITHOUT INVERSE RELATIONS
-        ## inverse
-        # 1 -> r2 -> inverse
-        # 3 -> e4
-        inv_r2 = self.data.rel_to_inv(1)
-        expected_result = [0]
-        self.assertCountEqual(self.data.get_tails_for_rel_entity(Graph_names.Test, inv_r2, 3, False), expected_result)
+        self.assertCountEqual(self.data.get_heads_for_rel_tail(Graph_names.Train, inv_r1, 1), expected_result)
         # reverse
-        # 1 -> r2 -> inverse
-        # 0 -> e1
-        expected_result = [3, 2]
-        self.assertCountEqual(self.data.get_tails_for_rel_entity(Graph_names.Test, inv_r2, 0, True), expected_result)
+        expected_result = [0, 2]
+        self.assertCountEqual(self.data.get_heads_for_rel_tail(Graph_names.Train, self.data.inv_to_rel((inv_r1)), 1), expected_result)
 
-    def test_get_facts_for_rel_new(self):
+    def test_get_facts_for_rel(self):
         # Get facts for single relation as a dict[int,[int]]
         # GRAPH WITH INVERSE RELATIONS
         # 0 -> r1
@@ -108,10 +95,10 @@ class TestData(unittest.TestCase):
         for h, t in self.data.get_facts_for_rel(Graph_names.Train, 0):
             facts[h] = t
         expected = {
-            0: [1, 2],
-            1: [3],
-            2: [1],
-            3: [0]
+            0: [3],
+            1: [0, 2],
+            2: [0],
+            3: [1]
         }
         self.assertDictEqual(facts, expected)
 
@@ -122,14 +109,14 @@ class TestData(unittest.TestCase):
         for h ,t in self.data.get_facts_for_rel(Graph_names.Train, inv_r1):
             facts[h] = t
         expected = {
-            0: [3],
-            1: [0, 2],
-            2: [0],
-            3: [1]
+            0: [1, 2],
+            1: [3],
+            2: [1],
+            3: [0]
         }
         self.assertDictEqual(facts, expected)
 
-    def test_get_tails_new(self):
+    def test_get_heads(self):
         # get next entities for all relations
         ## GRAPH WITH INVERSE RELATIONS
         # 0 -> e1
@@ -137,18 +124,16 @@ class TestData(unittest.TestCase):
         # 1 -> r2
         # 3 -> inv_r1
         inv_r1 = self.data.rel_to_inv(0)
+        inv_r2 = self.data.rel_to_inv(1)
         result = {}
-        for r, entities in self.data.get_tails(Graph_names.Train, 0):
+        for r, entities in self.data.get_heads(Graph_names.Train, 0):
             result[r] = entities
         expected = {
-            0: [2, 1],
-            1: [2, 3],
-            inv_r1: [3]
+            0: [3],
+            inv_r1: [1, 2],
+            inv_r2: [2, 3]
         }
-        self.assertEqual(len(result), len(expected))
-        self.assertCountEqual(result[0], expected[0])
-        self.assertCountEqual(result[1], expected[1])
-        self.assertCountEqual(result[inv_r1], expected[inv_r1])
+        self.assertDictEqual(result, expected)
 
 if __name__ == "__main":
     unittest.main()

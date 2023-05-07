@@ -45,12 +45,16 @@ def main():
         generate_files(dataset_dir_path)
         print('done')
 
+    tradeoff = [0.0025, 0.003, 0.0035, 0.004, 0.0045]
+    tradeoff = [0.02, 0.03, 0.04, 0.05, 0.0055, 0.06, 0.07, 0.08, 0.09, 0.1]
+    tradeoff = [0.005, 0.01, 0.025, 0.05, 0.1, 0.25]
     tradeoff = [0.02, 0.025, 0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.06]
-    # lpr = LPR_model(dataset_dir_path, tradeoff, args)
-    # lpr.fit()
-    # lpr.predict()
     lpr = LPR_model(dataset_dir_path, tradeoff, args)
     lpr.fit()
+    result, ranks = lpr.predict()
+    print(result)
+    print(ranks)
+
 
 if __name__ == "__main__":
     main()

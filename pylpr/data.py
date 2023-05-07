@@ -11,6 +11,7 @@ filename_valid = "valid.txt"
 filename_entities = "entities.txt"
 filename_relations = "relations.txt"
 
+
 def generate_files(dataset_dir) -> None:
     entities = set()
     relations = set()
@@ -22,9 +23,9 @@ def generate_files(dataset_dir) -> None:
         with open(full_path) as f:
             for line in f:
                 splitted = line.strip().split()
-                assert(len(splitted) == 3)
+                assert (len(splitted) == 3)
 
-                # expected triplets in form (head, relation, tail)
+                # expected triplets in form (tail, relation, head)
                 relations.add(splitted[1])
                 entities.add(splitted[0])
                 entities.add(splitted[2])
@@ -36,8 +37,10 @@ def generate_files(dataset_dir) -> None:
     with open(path.join(dataset_dir, filename_entities), 'w') as f:
         f.writelines([entity + '\n' for entity in entities])
 
+
 def get_element_id(element: str):
     return int(''.join(filter(str.isdigit, element)))
+
 
 def num_encode(file_path: str) -> dict[str, int]:
     n = 0
@@ -52,11 +55,11 @@ def num_encode(file_path: str) -> dict[str, int]:
     return result
 
 
-
 class Graph_names(Enum):
     Train = 'train',
     Test = 'test',
     Validate = 'validate'
+
 
 class Data:
     def __init__(self, dataset_dir) -> None:
@@ -76,9 +79,9 @@ class Data:
         self.num_relation = len(self.relation_to_num)
 
         self.graphs = {
-            Graph_names.Train    : self.create_graph(self.file_train, include_inverse=True),
-            Graph_names.Validate : self.create_graph(self.file_validate, True),
-            Graph_names.Test     : self.create_graph(self.file_test, True)
+            Graph_names.Train: self.create_graph(self.file_train, include_inverse=True),
+            Graph_names.Validate: self.create_graph(self.file_validate, True),
+            Graph_names.Test: self.create_graph(self.file_test, True)
         }
 
     #
@@ -101,18 +104,18 @@ class Data:
                 head = self.entity_to_num[splitted[2]]
 
                 try:
-                    graph[rel][head].append(tail)
+                    graph[rel][tail].append(head)
                 except KeyError:
-                    graph[rel][head] = [tail, ]
+                    graph[rel][tail] = [head, ]
 
                 if include_inverse:
                     try:
-                        graph[rel + self.num_relation][tail].append(head)
-                    except:
-                        graph[rel + self.num_relation][tail] = [head,]
+                        graph[rel + self.num_relation][head].append(tail)
+                    except KeyError:
+                        graph[rel + self.num_relation][head] = [tail, ]
 
         return graph
-    
+
     def create_graph_sparse(self, filepath, include_inverse=False):
         graph = {}
         for rel in np.arange(self.num_relation):
@@ -129,10 +132,9 @@ class Data:
 
                 graph[rel][tail, head] = True
 
-
         if include_inverse:
             for rel in np.arange(self.num_relation):
-                graph[rel+self.num_relation] = graph[rel].transpose()
+                graph[rel + self.num_relation] = graph[rel].transpose()
 
         for rel in graph:
             graph[rel] = graph[rel].tolil()
@@ -161,7 +163,7 @@ class Data:
         if self.is_inverse(inv):
             return inv % self.num_relation
         return inv
-    
+
     def inverse_rel(self, rel):
         return self.inv_to_rel(rel) if self.is_inverse(rel) else self.rel_to_inv(rel)
 
@@ -172,66 +174,71 @@ class Data:
     # TAILS
     #
 
-    def get_tails_for_rel_head(self, graph, rel, head):
-        return self.graphs[graph][rel][head]
-    
-    def find_heads_for_rel_tail(self, graph: Graph_names, rel: int, tail: int):
-        return [head for head, tails in self.graphs[graph][rel].items() if tail in tails]
+    def get_heads_for_rel_tail(self, graph, rel, tail):
+        return self.graphs[graph][rel][tail]
 
-    def get_tails_for_rel_entity(self, graph: Graph_names, rel: int, entity: int, reverse=False) -> list[int]:
+    def find_tails_for_rel_head(self, graph: Graph_names, rel: int, head: int):
+        return [head for head, tails in self.graphs[graph][rel].items() if head in tails]
+
+    def get_heads_for_rel_entity(self, graph: Graph_names, rel: int, entity: int, reverse=False) -> list[int]:
         result = None
 
         if self.is_inverse_included(graph):
             if reverse:
                 r = self.inv_to_rel(rel) if self.is_inverse(rel) else self.rel_to_inv(rel)
-                result = self.get_tails_for_rel_head(graph, r, entity)
+                result = self.get_heads_for_rel_tail(graph, r, entity)
             else:
-                result = self.get_tails_for_rel_head(graph, rel, entity)
+                result = self.get_heads_for_rel_tail(graph, rel, entity)
         else:
             transpose_data = self.is_inverse(rel)
             r = self.inv_to_rel(rel)
             if reverse:
                 transpose_data = not transpose_data
             if transpose_data:
-                result = self.find_heads_for_rel_tail(graph, r, entity)
+                result = self.find_tails_for_rel_head(graph, r, entity)
             else:
-                result = self.get_tails_for_rel_head(graph, r, entity)
+                result = self.get_heads_for_rel_tail(graph, r, entity)
 
         return result
 
-    def get_tails_corrupted_for_rel_head(self, graph_name: Graph_names, rel: int, head: int, transpose=False):
-        indexes = self.get_tails_for_rel_head(graph_name, rel, head)
+    def get_heads_corrupted_for_rel_tail(self, graph_name: Graph_names, rel: int, tail: int):
+        indexes = self.get_heads_for_rel_tail(graph_name, rel, tail)
         mask = np.ones(self.num_entity, dtype=bool)
         mask[indexes] = False
         return np.array(np.arange(self.num_entity))[mask]
 
-    def get_tails_corrupted_for_rel_entity(self, graph: Graph_names, rel: int, entity: int, reverse=False) -> NDArray[np.intp]:
-        """Same as 'get_tails_for_rel_entity' but only not existing facts are returned"""
+    def get_heads_corrupted_for_rel_entity(self, graph: Graph_names, rel: int, entity: int, reverse=False) -> NDArray[
+        np.intp]:
+        """Same as 'get_heads_for_rel_entity' but only not existing facts are returned"""
         result = None
 
         if self.is_inverse_included(graph):
             if reverse:
                 r = self.inverse_rel(rel)
-                result = self.get_tails_corrupted_for_rel_head(graph, r, entity)
+                result = self.get_heads_corrupted_for_rel_tail(graph, r, entity)
             else:
-                result = self.get_tails_corrupted_for_rel_head(graph, rel, entity)
+                result = self.get_heads_corrupted_for_rel_tail(graph, rel, entity)
         else:
             transpose_data = self.is_inverse(rel)
             r = self.inv_to_rel(rel)
             if reverse:
                 transpose_data = not transpose_data
             if transpose_data:
-                result = self.get_tails_corrupted_for_rel_head(graph, r, entity, True)
+                result = self.get_heads_corrupted_for_rel_tail(graph, r, entity)
             else:
-                result = self.get_tails_corrupted_for_rel_head(graph, r, entity)
+                result = self.get_heads_corrupted_for_rel_tail(graph, r, entity)
 
         return result
 
-    def get_tails(self, graph, head):
-        return [(rel, self.graphs[graph][rel][head]) for rel in self.graphs[graph] if self.graphs[graph][rel][head]]
+    def get_heads(self, graph, tail):
+        for rel in self.graphs[graph]:
+            if len(self.graphs[graph][rel][tail]) > 0:
+                yield rel, self.graphs[graph][rel][tail]
 
     #
     # FACTS
     #
     def get_facts_for_rel(self, graph, rel):
-        return [(head, tails) for (head, tails) in self.graphs[graph][rel].items() if tails]
+        for tail, heads in self.graphs[graph][rel].items():
+            if len(heads) > 0:
+                yield tail, heads
